@@ -16,6 +16,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
         return new ErrorResponse("Username Already Taken");
     }
 
+    @ExceptionHandler(value = IncorrectUserOrPassword.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ErrorResponse handle(IncorrectUserOrPassword ex, WebRequest req)
+    {
+        return new ErrorResponse("Username or Password is incorrect");
+    }
+
+    @ExceptionHandler(value = UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handle(UserNotFoundException ex, WebRequest req)
+    {
+        return new ErrorResponse("Username not found");
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ErrorResponse handle(Exception ex, WebRequest req)

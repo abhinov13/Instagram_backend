@@ -1,5 +1,4 @@
 package com.example.instagram.Model;
-
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
