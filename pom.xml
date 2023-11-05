@@ -35,7 +35,31 @@
 		<java.version>
 			17
 		</java.version>
+		<aws.sdk.version>
+			2.19.1
+		</aws.sdk.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>
+					software.amazon.awssdk
+				</groupId>
+				<artifactId>
+					bom
+				</artifactId>
+				<version>
+					${aws.sdk.version}
+				</version>
+				<type>
+					pom
+				</type>
+				<scope>
+					import
+				</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>
@@ -93,6 +117,25 @@
 			<artifactId>
 				spring-boot-starter-security
 			</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>
+				software.amazon.awssdk
+			</groupId>
+			<artifactId>
+				s3-transfer-manager
+			</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>
+				software.amazon.awssdk.crt
+			</groupId>
+			<artifactId>
+				aws-crt
+			</artifactId>
+			<version>
+				0.20.3
+			</version>
 		</dependency>
 	</dependencies>
 	<build>
