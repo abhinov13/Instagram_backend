@@ -12,7 +12,7 @@ public class PostKeyGenerator implements IdentifierGenerator {
 
     @Override
     public Object generate(SharedSessionContractImplementor session, Object obj) {
-        String prefix = ((Post)obj).getUsername();
+        String prefix = ((Post)obj).getUsername() + ".";
         //check if this can be ignored 
         //JdbcConnectionAccess con = session.getJdbcConnectionAccess();
 

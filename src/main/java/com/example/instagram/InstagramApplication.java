@@ -12,9 +12,6 @@ public class InstagramApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(InstagramApplication.class, args);
-		
-		System.out.println("printing property");
-		System.out.println(System.getProperty("user.dir"));
 	}
 
 	@Bean

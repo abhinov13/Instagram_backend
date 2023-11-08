@@ -30,6 +30,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
         return new ErrorResponse("Username not found");
     }
 
+    @ExceptionHandler(value = InvalidFileException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handle(InvalidFileException ex, WebRequest req)
+    {
+        return new ErrorResponse("Invalid file exception");
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ErrorResponse handle(Exception ex, WebRequest req)

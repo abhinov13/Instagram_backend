@@ -27,7 +27,7 @@ public class Post {
     String id;
 
     public Post() {
-
+        creationDate = new Date();
     }
 
     public String getPostLink() {
