@@ -1,15 +1,16 @@
 package com.example.instagram.Controller;
-import java.util.Map;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.example.instagram.Exception.InvalidFileException;
+import com.example.instagram.Model.Post;
 import com.example.instagram.Service.FileUploadService;
 import com.example.instagram.Service.PostService;
 
@@ -22,26 +23,24 @@ public class PostController {
     PostService postService;
 
     @PostMapping("/upload")
-    public ResponseEntity<?> postUpload(@RequestParam("username") String username,@RequestParam("description") String description,@RequestParam("file") MultipartFile file) throws Exception
+    public ResponseEntity<Post> postUpload(@RequestParam("username") String username,@RequestParam("description") String description,@RequestParam("file") MultipartFile file) throws Exception
     {
-        /*
-         * Logic to be written here
-         * Upload the file to local storage
-         * Once Upload push it to s3
-         * Once pushed get the link from s3 and create Post object with it
-         */
         Long nextId = postService.getNextId(username);
-        System.out.println("Original filename");
-        System.out.println(file.getOriginalFilename());
         if(nextId == null)
         {
             nextId = (long) 1;
         }
         if(username == null || nextId == null) throw new InvalidFileException();
-        System.out.println(fileService.storeToLocal(file, (username + "." + nextId)));
-        // make all service and everything to upload to s3
-        String postLink = "Done";
-        //postService.createPost(postLink, description, username);
-        return ResponseEntity.ok().body("Done");
+        List<String> localFileInfo = fileService.storeToLocal(file, (username + "." + nextId));
+        String postLink = fileService.storeToCloud(localFileInfo.get(0), localFileInfo.get(1));
+        Post post = postService.createPost(postLink, description, username);
+        return new ResponseEntity<Post>(post, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getPosts")
+    public ResponseEntity<?> getPosts()
+    {
+        System.out.println("called getPosts");
+        return ResponseEntity.ok().body(postService.getPosts());
     }
 }

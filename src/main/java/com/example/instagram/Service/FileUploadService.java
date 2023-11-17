@@ -1,69 +1,73 @@
 package com.example.instagram.Service;
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
+import java.io.File;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.example.instagram.Exception.InvalidFileException;
-
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.transfer.s3.S3TransferManager;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 public class FileUploadService {
     static final private String path = System.getProperty("user.dir") + "\\uploads\\";
     @Value("${aws.secretAccessKey}")
-    static private String secretAccessKey;
+    private String secretAccessKey;
 
     @Value("${aws.accessKey}")
-    static private String accessKey;
-    
+    private String accessKey;
 
-    public String storeToLocal(MultipartFile file, String filename) throws Exception
-    {
-        if(file.isEmpty()) throw new InvalidFileException();
-        
-        /*try(InputStream stream = file.getInputStream()){
-            Files.copy(stream, target);
-        }
-        catch(Exception exception)
+    @Value("instagram-post-images-bucket")
+    private String bucketName;
+
+    public List<String> storeToLocal(MultipartFile file, String filename) throws Exception {
+        if (file.isEmpty())
+            throw new InvalidFileException();
+        String orignialFilename = file.getOriginalFilename();
+        String extension;
+        if(orignialFilename != null)
         {
-            System.out.println(exception.getCause());
-            System.out.println(exception.getLocalizedMessage());
-            System.out.println(exception.getStackTrace().toString());
-            throw exception;
-        }*/
-        String extension =  file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-        File target = new File(path + filename + "." + extension);
+            extension = orignialFilename.substring(orignialFilename.lastIndexOf(".") + 1);
+        }
+        else
+        {
+            extension = "";
+        }
+        String completeFilename = filename + "." + extension; 
+        String filePath = path + completeFilename;
+        File target = new File(filePath);
         file.transferTo(target);
-        System.out.println("target " + target);
-        return "Great";
+        return Arrays.asList(new String[]{filePath, completeFilename});
     }
-    
-    public String storeToCloud(MultipartFile file, String filename) throws InvalidFileException
-    {
-        if(file.isEmpty()) throw new InvalidFileException();
-        S3AsyncClient client = S3AsyncClient.builder()
-                               .credentialsProvider(new AwsCredentialsProvider() {
-                                @Override
-                                public AwsCredentials resolveCredentials() {
-                                    return AwsBasicCredentials.create(accessKey, secretAccessKey);
-                                }
-                               })
-                               .region(Region.EU_NORTH_1)
-                               .build();
-        S3TransferManager manager = S3TransferManager.builder().s3Client(client).build();
-                               
-        return null;
+
+    public String storeToCloud(String filepath, String filename) throws InvalidFileException {
+        try {
+
+            S3Client s3 = S3Client.builder()
+                    .forcePathStyle(true)
+                    .region(Region.EU_NORTH_1)
+                    .credentialsProvider(new AwsCredentialsProvider() {
+                        @Override
+                        public AwsCredentials resolveCredentials() {
+                            return AwsBasicCredentials.create(accessKey, secretAccessKey);
+                        }
+                    })
+                    .endpointOverride(URI.create("https://s3.eu-north-1.amazonaws.com"))
+                    .build();
+            PutObjectRequest request = PutObjectRequest.builder().bucket(bucketName).key(filename).build();
+            s3.putObject(request, RequestBody.fromFile(new File(filepath)));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        return "https://" + bucketName + ".s3.eu-north-1.amazonaws.com/" + filename;
     }
-    
 }

@@ -1,30 +1,21 @@
 package com.example.instagram.Model;
-
 import java.util.Date;
-
 import org.hibernate.annotations.GenericGenerator;
-
 import com.example.instagram.Model.KeyClass.PostKey;
-
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-
 @Entity
-@IdClass(PostKey.class)
 public class Post {
     @Column(name = "link", unique = true)
     String postLink;
     String description;
     Date creationDate;
-    @Id
-    String username;
-    @Id
+    @EmbeddedId
     @GenericGenerator(name = "postIdGenerator", strategy = "com.example.instagram.Model.IdGenerators.PostKeyGenerator")
     @GeneratedValue(generator = "postIdGenerator")
-    String id;
+    PostKey key;
 
     public Post() {
         creationDate = new Date();
@@ -54,20 +45,11 @@ public class Post {
         this.creationDate = creationDate;
     }
 
-    public String getUsername() {
-        return username;
+    public PostKey getKey() {
+        return key;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setKey(PostKey key) {
+        this.key = key;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
 }

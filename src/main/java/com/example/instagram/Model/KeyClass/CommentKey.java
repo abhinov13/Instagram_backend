@@ -1,16 +1,15 @@
 package com.example.instagram.Model.KeyClass;
+
 import java.io.Serializable;
 
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class PostKey implements Serializable{
+public class CommentKey implements Serializable{
     String username;
     Long id;
 
-    public PostKey()
-    {
-
+    public CommentKey() {
     }
 
     public String getUsername() {
@@ -46,7 +45,7 @@ public class PostKey implements Serializable{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PostKey other = (PostKey) obj;
+        CommentKey other = (CommentKey) obj;
         if (username == null) {
             if (other.username != null)
                 return false;
@@ -59,4 +58,5 @@ public class PostKey implements Serializable{
             return false;
         return true;
     }
+
 }
