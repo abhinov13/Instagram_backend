@@ -38,7 +38,7 @@ public class UserService {
             }
             return repo.save(user);
         }
-        throw new UserNotFoundException();
+        else throw new UserNotFoundException();
     }
 
     public Boolean authenticate(String username, String password)

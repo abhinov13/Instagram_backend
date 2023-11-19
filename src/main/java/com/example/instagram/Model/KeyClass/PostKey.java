@@ -1,20 +1,25 @@
 package com.example.instagram.Model.KeyClass;
+
 import java.io.Serializable;
 
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class PostKey implements Serializable{
+public class PostKey implements Serializable {
     String username;
     Long id;
 
-    public PostKey()
-    {
+    public PostKey() {
 
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public PostKey(String username, Long id) {
+        this.username = username;
+        this.id = id;
     }
 
     public void setUsername(String username) {

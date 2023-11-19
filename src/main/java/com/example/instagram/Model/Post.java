@@ -1,11 +1,15 @@
 package com.example.instagram.Model;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hibernate.annotations.GenericGenerator;
 import com.example.instagram.Model.KeyClass.PostKey;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.OneToMany;
 @Entity
 public class Post {
     @Column(name = "link", unique = true)
@@ -16,6 +20,9 @@ public class Post {
     @GenericGenerator(name = "postIdGenerator", strategy = "com.example.instagram.Model.IdGenerators.PostKeyGenerator")
     @GeneratedValue(generator = "postIdGenerator")
     PostKey key;
+
+    @OneToMany(mappedBy = "post")
+    Set<Comment> comments = new HashSet<>();
 
     public Post() {
         creationDate = new Date();
@@ -52,4 +59,20 @@ public class Post {
     public void setKey(PostKey key) {
         this.key = key;
     }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "Post [postLink=" + postLink + ", description=" + description + ", key=" + key + ", comments=" + comments
+                + "]";
+    }
+
+    
 }

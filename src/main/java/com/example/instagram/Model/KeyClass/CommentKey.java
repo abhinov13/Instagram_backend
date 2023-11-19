@@ -5,11 +5,16 @@ import java.io.Serializable;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class CommentKey implements Serializable{
+public class CommentKey implements Serializable {
     String username;
     Long id;
 
     public CommentKey() {
+    }
+
+    public CommentKey(String username, Long id) {
+        this.username = username;
+        this.id = id;
     }
 
     public String getUsername() {

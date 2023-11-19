@@ -37,6 +37,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
         return new ErrorResponse("Invalid file exception");
     }
 
+    @ExceptionHandler(value = PostNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handle(PostNotFoundException ex, WebRequest req)
+    {
+        return new ErrorResponse("Post not found");
+    }
+
+    @ExceptionHandler(value = CommentNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ErrorResponse handle(CommentNotFoundException ex, WebRequest req)
+    {
+        return new ErrorResponse("Comment not found");
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ErrorResponse handle(Exception ex, WebRequest req)
