@@ -35,9 +35,6 @@ public class CommentKeyGenerator implements IdentifierGenerator {
             CommentKey key = new CommentKey();
             key.setId(id);
             key.setUsername(comment.getKey().getUsername());
-            System.out.println("key values");
-            System.out.println(key.getUsername());
-            System.out.println(key.getId());
             return key;
         } catch (Exception e) {
             e.printStackTrace();

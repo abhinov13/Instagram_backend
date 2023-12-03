@@ -46,7 +46,6 @@ public class CommentService {
 
     public Comment createPostReply(String postUsername, Long postId, String commentUsername, String commentBody)
             throws PostNotFoundException {
-        System.out.println(postUsername + " " + postId + " " + commentUsername + " " + commentBody);
         Optional<Post> postWrapper = postRepo.findById(new PostKey(postUsername, postId));
         if (postWrapper.isPresent()) {
             Post post = postWrapper.get();
@@ -73,6 +72,7 @@ public class CommentService {
         }
         else
         {
+            System.out.println("an error has occurred");
             throw new PostNotFoundException();
         }
     }

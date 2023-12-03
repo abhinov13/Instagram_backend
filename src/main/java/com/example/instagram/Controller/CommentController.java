@@ -1,5 +1,5 @@
 package com.example.instagram.Controller;
-import java.util.HashSet;
+
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,7 @@ public class CommentController {
     CommentService service;
 
     @PostMapping("/add")
-    public Comment addComment(@RequestBody CommentBody body) throws Exception
+    public @ResponseBody Comment addComment(@RequestBody CommentBody body) throws Exception
     {
         if(body.getPostUserId() != null)
         {

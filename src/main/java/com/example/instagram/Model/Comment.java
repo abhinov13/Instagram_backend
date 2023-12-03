@@ -40,7 +40,6 @@ public class Comment {
     @OneToMany(mappedBy = "replyTo")
     Set<Comment> replyBy = new HashSet<>();
     @ManyToOne
-    // @MapsId("replyBy")
     @Nullable
     @JoinColumns({ @JoinColumn(name = "replyToUsername", referencedColumnName = "id", nullable = true),
             @JoinColumn(name = "replyToId", referencedColumnName = "username", nullable = true) })

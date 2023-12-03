@@ -1,4 +1,5 @@
 package com.example.instagram.Model;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,7 +10,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+
 @Entity
 public class Post {
     @Column(name = "link", unique = true)
@@ -23,6 +26,17 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     Set<Comment> comments = new HashSet<>();
+
+    @ManyToMany(mappedBy = "likedPost")
+    Set<User> likedBy = new HashSet<>();
+
+    public Set<User> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(Set<User> likedBy) {
+        this.likedBy = likedBy;
+    }
 
     public Post() {
         creationDate = new Date();
@@ -74,5 +88,4 @@ public class Post {
                 + "]";
     }
 
-    
 }
