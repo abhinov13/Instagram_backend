@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.instagram.DTO.Recommendation;
 import com.example.instagram.Model.User;
 import com.example.instagram.Service.FollowService;
 
@@ -58,6 +59,16 @@ public class FollowersController {
     @GetMapping("getFollowingCount/{username}")
     public @ResponseBody Integer getFollowingCount(@PathVariable String username) throws Exception {
         return service.getFollowing(username).size();
+    }
+
+    @GetMapping("getRecommendedPeople/{username}")
+    public @ResponseBody Set<Recommendation> getRecommendedPeople(@PathVariable String username) throws Exception {
+        Set<Recommendation> peopleUserMayKnow = service.getRecommendation(username);
+
+        if (peopleUserMayKnow.size() < 5)
+            peopleUserMayKnow.addAll(service.getPopularUsers(username));
+
+        return peopleUserMayKnow;
     }
 
 }

@@ -15,6 +15,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
@@ -28,11 +30,18 @@ public class Comment {
     String comment;
 
     @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "commentLikes", inverseJoinColumns = @JoinColumn(referencedColumnName = "username"), joinColumns = {
+            @JoinColumn(referencedColumnName = "id"),
+            @JoinColumn(referencedColumnName = "username") })
+    Set<User> users;
+
+    @JsonIgnore
     @ManyToOne
     @Nullable
     @JoinColumns({
-        @JoinColumn(name = "postUsername", referencedColumnName = "username", nullable = true),
-        @JoinColumn(name = "postId", referencedColumnName = "id", nullable = true)
+            @JoinColumn(name = "postUsername", referencedColumnName = "username", nullable = true),
+            @JoinColumn(name = "postId", referencedColumnName = "id", nullable = true)
     })
     Post post;
 
@@ -47,6 +56,14 @@ public class Comment {
 
     public Comment() {
         creationDate = new Date();
+    }
+
+    public Set<User> getUsers() {
+        return this.users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
     public Date getCreationDate() {
@@ -123,9 +140,9 @@ public class Comment {
         if (key == null) {
             if (other.key != null)
                 return false;
-        } else if (!key.equals(other.key))
-            return false;
-        return true;
+        } else if (key.getUsername().equals(other.getKey().getUsername()) && key.getId() == other.getKey().getId())
+            return true;
+        return false;
     }
 
 }

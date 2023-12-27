@@ -1,4 +1,4 @@
-package com.example.instagram.Controller.RequestBody;
+package com.example.instagram.DTO;
 
 public class CommentBody {
     String username, comment, replyToUsername, postUsername;

@@ -51,10 +51,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
         return new ErrorResponse("Comment not found");
     }
 
+    @ExceptionHandler(value = ServerInternalError.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ErrorResponse handle(ServerInternalError ex, WebRequest req)
+    {
+        return new ErrorResponse("Server failure");
+    }
+
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ErrorResponse handle(Exception ex, WebRequest req)
     {
         return new ErrorResponse("Issue not handled internally");
     }
+
+    
 }
