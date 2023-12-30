@@ -3,8 +3,10 @@ package com.example.instagram.Repository;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.instagram.Model.Notification;
 
@@ -33,10 +35,13 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
                         """)
         public void deleteForUser(String username);
 
+        @Transactional
+        @Modifying
         @Query(nativeQuery = true, value = """
                         UPDATE notification
                         SET    seen = 'seen'
                         WHERE  to_username = ?1
+                        AND    seen != 'seen'
                         """)
         public void checkNotifications(String username);
 }

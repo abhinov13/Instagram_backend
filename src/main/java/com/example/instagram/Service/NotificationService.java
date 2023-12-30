@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.instagram.DTO.ChatMessageDTO;
 import com.example.instagram.DTO.NotificationDTO;
+import com.example.instagram.Model.ChatLobby;
+import com.example.instagram.Model.ChatMessage;
 import com.example.instagram.Model.Notification;
 import com.example.instagram.Model.Post;
 import com.example.instagram.Model.User;
@@ -35,6 +38,12 @@ public class NotificationService {
             dto.add(obj);
         }
         sender.convertAndSend("/topic/" + username, dto);
+    }
+
+    public void sendMessageNotification(ChatMessage message) throws Exception {
+        ChatLobby lobby = message.getLobby();
+        ChatMessageDTO dto = new ChatMessageDTO(message);
+        sender.convertAndSend("/topic/chat/" + lobby.getId(), dto);
     }
 
     public Set<User> getFriends(User user) {

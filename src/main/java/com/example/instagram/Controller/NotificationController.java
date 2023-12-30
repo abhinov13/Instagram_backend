@@ -15,15 +15,14 @@ public class NotificationController {
     NotificationService service;
 
     @MessageMapping("/getNotifications")
-    public void sendNotification(String username) throws Exception{
-        System.out.println("called with username " + username);
+    public void sendNotification(String username) throws Exception {
         service.sendNotificationsForUser(username);
     }
 
     @PostMapping("/checkNotifications")
-    public @ResponseBody String checkedNotifications(@RequestBody String username)
-    {
+    public @ResponseBody String checkedNotifications(@RequestBody String username) throws Exception {
         service.seenNotifications(username);
+        sendNotification(username);
         return "Seen notifications for " + username;
     }
 }
