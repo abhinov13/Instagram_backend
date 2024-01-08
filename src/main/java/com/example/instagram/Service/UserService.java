@@ -70,10 +70,8 @@ public class UserService {
         Example<User> example = Example.of(sample);
         Optional<User> userWrapper = repo.findOne(example);
         if (userWrapper.isPresent()) {
-            System.out.println("returning false");
             return false;
         } else {
-            System.out.println("returning true");
             return true;
         }
     }

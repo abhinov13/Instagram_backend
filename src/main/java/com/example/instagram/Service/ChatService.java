@@ -68,7 +68,6 @@ public class ChatService {
         try {
             return messageRepo.getLastMessage(id);
         } catch (Exception e) {
-            System.out.println("No record found");
             return null;
         }
     }

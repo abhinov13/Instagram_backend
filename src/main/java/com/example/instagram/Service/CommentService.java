@@ -81,7 +81,6 @@ public class CommentService {
             Post post = postwrapper.get();
             return post.getComments();
         } else {
-            System.out.println("an error has occurred");
             throw new PostNotFoundException();
         }
     }

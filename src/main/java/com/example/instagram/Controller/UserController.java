@@ -39,13 +39,9 @@ public class UserController {
     public @ResponseBody User uploadProfilePicture(@RequestParam("username") String username,
             @RequestParam("file") MultipartFile file)
             throws Exception {
-        System.out.println("called");
         List<String> localFileInfo = fileService.storeToLocal(file, (username));
-        System.out.println("stored to loca;");
         String imageLink = fileService.storeToCloud(localFileInfo.get(0), localFileInfo.get(1));
-        System.out.println("stored to cloud");
         User user = userService.updateProfileImage(username, imageLink);
-        System.out.println("success");
         return user;
     }
 
@@ -68,7 +64,6 @@ public class UserController {
 
     @PostMapping("/validate/mobileOrEmail")
     public @ResponseBody Boolean validateMobileEmail(@RequestBody String mobileOrEmail) {
-        System.out.println(mobileOrEmail);
         if (mobileOrEmail.indexOf("@") == -1)
             return userService.validateMobile(mobileOrEmail);
         else

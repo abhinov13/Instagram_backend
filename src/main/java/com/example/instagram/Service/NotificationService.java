@@ -81,7 +81,6 @@ public class NotificationService {
             repo.deleteById(notification.getId());
             sendNotificationsForUser(to);
         } catch (Exception e) {
-            System.out.println("Exception handled");
             return;
         }
     }

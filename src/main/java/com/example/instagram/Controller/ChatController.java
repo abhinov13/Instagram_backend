@@ -44,10 +44,6 @@ public class ChatController {
             ChatMessage message = service.getLastMessage(lobby.getId());
             dtoSet.add(new DetailedLobby(lobby, message));
         }
-
-        for (DetailedLobby dto : dtoSet)
-            System.out.println(dto.toString());
-
         return dtoSet;
     }
 
